@@ -26,9 +26,12 @@ class ProductListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         if self.request.method == "GET":
             return Product.objects.all()
+        else:
+            user = self.request.user
+            return Product.objects.filter(creator=user)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(creator=self.request.user)
         else:
             print(serializer.errors)
