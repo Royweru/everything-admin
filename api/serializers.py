@@ -21,3 +21,11 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "description",
                   "slug", "price", "thumbnail", "images", "creator"]
         extra_kwargs = {"creator": {"read_only": True}}
+
+
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "password", "email"
+                  ]
+        extra_Kwargs = {"password": {"write_only": True}}
