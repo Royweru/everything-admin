@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer, ProductSerializer, UserDetailsSerializer
+from .serializers import UserSerializer, ProductSerializer, UserDetailsSerializer, CategorySerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Product
+from .models import Product, Category
 # Create your views here.
 
 
@@ -13,6 +13,24 @@ class CreateUserView(generics.CreateAPIView):
     querySet = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
+
+class CategoryListCreate(generics.ListCreateAPIView):
+    serializer_class = CategorySerializer
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated]
+        return super().get_permissions()
+
+    def get_queryset(self):
+        if self.request.method == "GET":
+            return Category.objects.all()
+        else:
+            user = self.request.user
+            return Category.objects.filter(creator=user)
 
 
 class ProductListCreate(generics.ListCreateAPIView):
@@ -70,12 +88,6 @@ class ProductUpdate(generics.UpdateAPIView):
             serializer.save()
         else:
             print(serializer.errors)
-
-
-class ProductDetail(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
 
 
 class UserDetail(APIView):

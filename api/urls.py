@@ -1,9 +1,9 @@
 from django.urls import path, include
-from .views import ProductListCreate, ProductDelete, ProductUpdate, ProductDetail, UserDetail, ProductRetrieve
+from .views import ProductListCreate, ProductDelete, ProductUpdate, UserDetail, ProductRetrieve, CategoryListCreate
 urlpatterns = [
     path('product/', ProductListCreate.as_view(), name="create-product"),
+    path('category/', CategoryListCreate.as_view(), name="create-category "),
     path('product/<str:pk>/', ProductRetrieve.as_view(), name="get-product"),
-    path('product/<str:pk>/', ProductDetail.as_view(), name="create-product"),
     path('product/delete/<str:pk>/',
          ProductDelete.as_view(), name='product-delete'),
     path('product/update/<str:pk>/',
