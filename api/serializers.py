@@ -33,9 +33,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)
+
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["id", "name", "products"]
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
@@ -44,3 +46,13 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "password", "email"
                   ]
         extra_Kwargs = {"password": {"write_only": True}}
+
+
+class EmailMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Email_messages
+        fields = ['id', 'name', 'email', 'message']
+
+    def create(self, validated_data):
+        email = Email_messages.objects.create(**validated_data)
+        return email

@@ -3,15 +3,21 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer, ProductSerializer, UserDetailsSerializer, CategorySerializer
+from .serializers import UserSerializer, ProductSerializer, UserDetailsSerializer, CategorySerializer, EmailMessageSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Product, Category
+from .models import Product, Category, Email_messages
 # Create your views here.
 
 
 class CreateUserView(generics.CreateAPIView):
     querySet = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+
+class EmailMessageCreate(generics.CreateAPIView):
+    queryset = Email_messages.objects.all()
+    serializer_class = EmailMessageSerializer
     permission_classes = [AllowAny]
 
 
@@ -31,6 +37,13 @@ class CategoryListCreate(generics.ListCreateAPIView):
         else:
             user = self.request.user
             return Category.objects.filter(creator=user)
+
+
+class CategoryDetailView(generics.RetrieveAPIView):
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
+    queryset = Category.objects.all()
+    lookup_field = 'id'
 
 
 class ProductListCreate(generics.ListCreateAPIView):
