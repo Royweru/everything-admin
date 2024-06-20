@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import ProductListCreate, CategoryDetailView, ProductDelete, ProductUpdate, UserDetail, ProductRetrieve, EmailMessageCreate, CategoryListCreate
+from .views import ProductListCreate, CategoryDetailView, ProductDelete, EmailMessageDelete, ProductUpdate, UserDetail, ProductRetrieve, EmailMessageCreate, CategoryListCreate
 urlpatterns = [
     path('product/', ProductListCreate.as_view(), name="create-product"),
     path('email-message/', EmailMessageCreate.as_view(), name='create-email '),
+    path('email-message/delete/<str:pk>/',
+         EmailMessageDelete.as_view(), name='delete-email '),
     path('category/<int:id>/', CategoryDetailView.as_view(),
          name='category-detail'),
     path('category/', CategoryListCreate.as_view(), name="create-category "),

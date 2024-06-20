@@ -15,10 +15,22 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class EmailMessageCreate(generics.CreateAPIView):
+class EmailMessageCreate(generics.ListCreateAPIView):
     queryset = Email_messages.objects.all()
     serializer_class = EmailMessageSerializer
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return Email_messages.objects.all()
+
+
+class EmailMessageDelete(generics.DestroyAPIView):
+    serializer_class = EmailMessageSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        if self.request.method == "GET":
+            return Email_messages.objects.all()
 
 
 class CategoryListCreate(generics.ListCreateAPIView):
